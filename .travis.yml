@@ -15,5 +15,6 @@ install:
 script:
     - goimports -d ./
     - go vet ./...
+    - sudo -E -s
     - go test ./...
     - go build
