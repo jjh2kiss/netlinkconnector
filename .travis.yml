@@ -6,10 +6,13 @@ go:
     - 1.7.1
     - tip
 env:
-    golabal:
-        - GOARCH=amd64
-script:
+    - GOARCH=amd64
+
+install:
     - go get golang.org/x/tools/cmd/goimports
+    - go get github.com/vishvananda/netlink
+
+script:
     - goimports -d ./
     - go tool vet -composites=false ./
     - go test ./...
