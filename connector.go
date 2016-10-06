@@ -62,6 +62,10 @@ func (self *NetlinkConnector) Write(cnmsg *CnMsg) error {
 		return fmt.Errorf("write called on a closed socket")
 	}
 
+	if cnmsg == nil {
+		return fmt.Errorf("can't write nil")
+	}
+
 	request := &nl.NetlinkRequest{}
 	request.Pid = uint32(os.Getpid())
 	request.Type = syscall.NLMSG_DONE
@@ -93,7 +97,7 @@ func (self *NetlinkConnector) Read() ([]*CnMsg, error) {
 		return nil, fmt.Errorf("Got short netlink message from socket")
 	}
 
-	cnmsgs, err := ParseNetlinkConnectorMessage(p)
+	cnmsgs, err := ParseNetlinkConnectorMessage(p[:n])
 	if err != nil {
 		return nil, err
 	}
@@ -122,5 +126,4 @@ func ParseNetlinkConnectorMessage(b []byte) ([]*CnMsg, error) {
 		cnmsgs = append(cnmsgs, cnmsg)
 	}
 	return cnmsgs, nil
-
 }
